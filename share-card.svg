@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Daily Word Ladder</title>
+  <desc id="desc">A bright social share card for Daily Word Ladder.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1090" cy="120" r="180" fill="rgba(125,211,252,0.14)"/>
+  <circle cx="180" cy="530" r="200" fill="rgba(167,139,250,0.14)"/>
+  <rect x="85" y="80" width="1030" height="470" rx="30" fill="rgba(15,23,42,0.72)" stroke="rgba(255,255,255,0.12)"/>
+  <text x="100" y="210" font-size="34" font-family="Arial, Helvetica, sans-serif" fill="#cfe3ff" letter-spacing="3">DAILY WORD LADDER</text>
+  <text x="100" y="300" font-size="92" font-family="Arial, Helvetica, sans-serif" font-weight="700" fill="#f8fbff">Play today</text>
+  <text x="100" y="390" font-size="92" font-family="Arial, Helvetica, sans-serif" font-weight="700" fill="url(#accent)">Solve it</text>
+  <text x="100" y="470" font-size="32" font-family="Arial, Helvetica, sans-serif" fill="#d7e6ff">Join the leaderboard • chase your streak</text>
+  <rect x="860" y="200" width="180" height="180" rx="28" fill="rgba(125,211,252,0.12)" stroke="rgba(125,211,252,0.8)"/>
+  <text x="900" y="275" font-size="76" font-family="Arial, Helvetica, sans-serif" font-weight="700" fill="#f8fbff">#1</text>
+  <text x="900" y="330" font-size="24" font-family="Arial, Helvetica, sans-serif" fill="#d7e6ff">board</text>
+</svg>

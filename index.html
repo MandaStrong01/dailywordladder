@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Word Ladder</title>
+    <meta
+      name="description"
+      content="Daily Word Ladder leaderboard and daily challenge. Join the board, solve today’s ladder, and chase your streak."
+    />
+    <meta property="og:title" content="Daily Word Ladder" />
+    <meta
+      property="og:description"
+      content="Daily Word Ladder leaderboard and daily challenge. Join the board, solve today’s ladder, and chase your streak."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mandastrong01.github.io/dailywordladder/" />
+    <meta property="og:image" content="https://mandastrong01.github.io/dailywordladder/share-card.svg" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Daily Word Ladder" />
+    <meta
+      property="twitter:description"
+      content="Daily Word Ladder leaderboard and daily challenge. Join the board, solve today’s ladder, and chase your streak."
+    />
+    <meta property="twitter:image" content="https://mandastrong01.github.io/dailywordladder/share-card.svg" />
+    <style>
+      :root {
+        --bg: #0d1321;
+        --panel: #121b2d;
+        --panel-2: #1b2a41;
+        --accent: #7dd3fc;
+        --accent-2: #a78bfa;
+        --text: #edf6ff;
+        --muted: #b4cae4;
+        --good: #86efac;
+        --bad: #fca5a5;
+        --warn: #fde68a;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: radial-gradient(circle at top, #14233d, var(--bg) 52%);
+        color: var(--text);
+      }
+
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 18px 56px;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, rgba(125,211,252,0.14), rgba(167,139,250,0.12));
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 18px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 20px 50px rgba(8, 12, 20, 0.4);
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: clamp(2.1rem, 3vw, 3rem);
+      }
+
+      .sub {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.3fr 0.7fr;
+        gap: 18px;
+      }
+
+      .card {
+        background: rgba(18,27,45,0.9);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 18px;
+      }
+
+      label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      input, button {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.1);
+        font-size: 1rem;
+      }
+
+      input {
+        background: rgba(255,255,255,0.04);
+        color: var(--text);
+        padding: 12px 14px;
+        outline: none;
+      }
+
+      button {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #07101d;
+        font-weight: 800;
+        padding: 12px 16px;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.14s ease, opacity 0.14s ease;
+      }
+
+      button:hover { transform: translateY(-1px); }
+      button:active { transform: translateY(0); }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .status {
+        min-height: 24px;
+        margin-top: 12px;
+        font-size: 0.96rem;
+        color: var(--muted);
+      }
+
+      .status.error { color: var(--bad); }
+      .status.success { color: var(--good); }
+      .status.warn { color: var(--warn); }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      th, td {
+        text-align: left;
+        padding: 10px 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      th {
+        color: var(--muted);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .config-box {
+        background: rgba(255,255,255,0.04);
+        border: 1px dashed rgba(255,255,255,0.12);
+        border-radius: 12px;
+        padding: 12px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      @media (max-width: 760px) {
+        .grid { grid-template-columns: 1fr; }
+        .row { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <section class="hero">
+        <h1>Daily Word Ladder</h1>
+        <p class="sub">
+          Join the board, solve today’s ladder, and keep your streak alive.
+        </p>
+      </section>
+
+      <div class="grid">
+        <div class="stack">
+          <div class="card">
+            <form id="join-form" class="stack">
+              <div>
+                <label for="handle">Handle</label>
+                <input id="handle" type="text" maxlength="10" placeholder="Example: Waxer_7" />
+              </div>
+              <button type="submit">Join leaderboard</button>
+            </form>
+            <div id="join-status" class="status"></div>
+          </div>
+
+          <div class="card">
+            <form id="solve-form" class="stack">
+              <div class="row">
+                <div>
+                  <label for="steps">Steps</label>
+                  <input id="steps" type="number" min="1" max="40" value="4" />
+                </div>
+                <div>
+                  <label for="par">Par</label>
+                  <input id="par" type="number" min="1" max="40" value="5" />
+                </div>
+              </div>
+              <button type="submit">Submit win</button>
+            </form>
+            <div id="solve-status" class="status"></div>
+          </div>
+        </div>
+
+        <aside class="card">
+          <h2>Leaderboard</h2>
+          <div class="muted">Updated every 30 seconds</div>
+          <table aria-label="Daily word ladder leaderboard">
+            <thead>
+              <tr>
+                <th>Handle</th>
+                <th>Solved</th>
+                <th>Streak</th>
+                <th>Best</th>
+                <th>Over</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body"></tbody>
+          </table>
+        </aside>
+      </div>
+
+      <div class="card" style="margin-top: 18px;">
+        <h3>Setup</h3>
+        <div class="config-box">
+          Replace the publishable key below with your Supabase project publishable key from the Supabase dashboard, then push this file to GitHub Pages.
+        </div>
+        <div id="config-status" class="status" style="margin-top: 12px;"></div>
+      </div>
+    </div>
+
+    <script>
+      const SUPABASE_URL = 'https://wvkqnrqcnoztajxxzyxc.supabase.co';
+      const SUPABASE_ANON_KEY = 'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
+      const BAD_WORDS = ['BAD', 'BANNED', 'HATE', 'FUCK', 'SHIT', 'DAMN'];
+      const STORAGE_KEY = 'dwl_dev';
+
+      function setStatus(el, msg, type = '') {
+        el.textContent = msg;
+        el.className = 'status';
+        if (type) el.classList.add(type);
+      }
+
+      function setDevice() {
+        let value = localStorage.getItem(STORAGE_KEY);
+        if (!value) {
+          value = crypto.randomUUID();
+          localStorage.setItem(STORAGE_KEY, value);
+        }
+        return value;
+      }
+
+      async function sha256(value) {
+        const data = new TextEncoder().encode(value);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const bytes = Array.from(new Uint8Array(hashBuffer));
+        return '0x' + bytes.map((b) => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      function getPlayerId(device) {
+        return sha256('dwl:' + device);
+      }
+
+      function normalizeHandle(raw) {
+        const cleaned = (raw || '').trim().replace(/[^A-Za-z0-9_.-]/g, '').slice(0, 10);
+        return cleaned.toUpperCase();
+      }
+
+      function validateHandle(handle) {
+        const normalized = normalizeHandle(handle);
+        if (normalized.length < 2 || normalized.length > 10) {
+          return 'Handle must be 2 to 10 characters.';
+        }
+        if (!/^[A-Z0-9_.-]+$/.test(normalized)) {
+          return 'Only A-Z, 0-9, _, ., and - are allowed.';
+        }
+        if (BAD_WORDS.some((word) => normalized.includes(word))) {
+          return 'That handle is not allowed.';
+        }
+        return normalized;
+      }
+
+      function getDayNumberToronto() {
+        const now = new Date();
+        const torontoString = now.toLocaleString('en-US', { timeZone: 'America/Toronto' });
+        const torontoDate = new Date(torontoString);
+        const start = new Date('2026-01-01T00:00:00-05:00');
+        const diffDays = Math.floor((torontoDate.getTime() - start.getTime()) / 86400000);
+        return diffDays;
+      }
+
+      async function callEdgeFunction(payload) {
+        if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes('PASTE_')) {
+          throw new Error('Add your publishable key before using the leaderboard.');
+        }
+
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/ladder-score`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const text = await res.text();
+        let data = null;
+        try { data = text ? JSON.parse(text) : null; } catch (error) {
+          data = { message: text || 'Unknown error' };
+        }
+
+        if (!res.ok) {
+          const message = data?.message || data?.error || 'Request failed.';
+          throw new Error(message);
+        }
+
+        return data;
+      }
+
+      async function joinLeaderboard(event) {
+        event.preventDefault();
+        const handleInput = document.getElementById('handle');
+        const validated = validateHandle(handleInput.value);
+        if (validated && typeof validated === 'string' && validated.length > 0 && !/^[A-Z0-9_.-]+$/.test(validated)) {
+          setStatus(document.getElementById('join-status'), validated, 'error');
+          return;
+        }
+
+        if (typeof validated !== 'string' || validated.length < 2) {
+          setStatus(document.getElementById('join-status'), validated || 'Invalid handle.', 'error');
+          return;
+        }
+
+        const device = setDevice();
+        const payload = {
+          action: 'join',
+          device,
+          handle: validated,
+          day: getDayNumberToronto()
+        };
+
+        try {
+          const result = await callEdgeFunction(payload);
+          handleInput.value = validated;
+          setStatus(document.getElementById('join-status'), result?.message || 'Joined successfully.', 'success');
+          await loadLeaderboard();
+        } catch (error) {
+          const msg = (error.message || '').includes('That handle is taken') ? 'That handle is taken.' : error.message || 'Unable to join.';
+          setStatus(document.getElementById('join-status'), msg, 'error');
+        }
+      }
+
+      async function submitWin(event) {
+        event.preventDefault();
+        const handleInput = document.getElementById('handle');
+        const stepsInput = document.getElementById('steps');
+        const parInput = document.getElementById('par');
+
+        const handle = validateHandle(handleInput.value);
+        if (typeof handle !== 'string' || handle.length < 2) {
+          setStatus(document.getElementById('solve-status'), handle || 'Please join first.', 'error');
+          return;
+        }
+
+        const steps = Number(stepsInput.value);
+        const par = Number(parInput.value);
+        if (!Number.isInteger(steps) || steps < 1 || steps > 40) {
+          setStatus(document.getElementById('solve-status'), 'Steps must be 1 to 40.', 'error');
+          return;
+        }
+        if (!Number.isInteger(par) || par < 1 || par > 40) {
+          setStatus(document.getElementById('solve-status'), 'Par must be 1 to 40.', 'error');
+          return;
+        }
+
+        try {
+          const result = await callEdgeFunction({
+            action: 'win',
+            device: setDevice(),
+            handle,
+            day: getDayNumberToronto(),
+            steps,
+            par
+          });
+          setStatus(document.getElementById('solve-status'), result?.message || 'Solved.', 'success');
+          await loadLeaderboard();
+        } catch (error) {
+          setStatus(document.getElementById('solve-status'), error.message || 'Unable to submit win.', 'error');
+        }
+      }
+
+      async function loadLeaderboard() {
+        const body = document.getElementById('leaderboard-body');
+        try {
+          if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes('PASTE_')) {
+            body.innerHTML = '<tr><td colspan="5" class="muted">Add your Supabase publishable key to enable the board.</td></tr>';
+            setStatus(document.getElementById('config-status'), 'Publishable key missing.', 'warn');
+            return;
+          }
+
+          const url = `${SUPABASE_URL}/rest/v1/ladder_players?select=handle,solved,streak,best,over&order=solved.desc,over.asc,best.desc&limit=50`;
+          const res = await fetch(url, {
+            headers: {
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`
+            }
+          });
+
+          if (!res.ok) throw new Error('Board failed to load.');
+          const rows = await res.json();
+
+          if (!rows.length) {
+            body.innerHTML = '<tr><td colspan="5" class="muted">No players yet — join the ladder.</td></tr>';
+            setStatus(document.getElementById('config-status'), 'Board connected.', 'success');
+            return;
+          }
+
+          body.innerHTML = rows.map((row) => `
+            <tr>
+              <td>${row.handle}</td>
+              <td>${row.solved}</td>
+              <td>${row.streak}</td>
+              <td>${row.best}</td>
+              <td>${row.over}</td>
+            </tr>
+          `).join('');
+          setStatus(document.getElementById('config-status'), 'Board connected.', 'success');
+        } catch (error) {
+          body.innerHTML = '<tr><td colspan="5" class="muted">Board unavailable right now.</td></tr>';
+          setStatus(document.getElementById('config-status'), error.message || 'Board unavailable.', 'error');
+        }
+      }
+
+      document.getElementById('join-form').addEventListener('submit', joinLeaderboard);
+      document.getElementById('solve-form').addEventListener('submit', submitWin);
+      setDevice();
+      loadLeaderboard();
+      setInterval(loadLeaderboard, 30000);
+    </script>
+  </body>
+</html>
