@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Daily Word Ladder</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#B36A00">
+<meta name="theme-color" content="#090D20">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Word Ladder">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -124,6 +124,54 @@ a.btn{display:inline-block;text-decoration:none}
 @media (prefers-reduced-motion:reduce){.rung.shake{animation:none}}
 </style>
 <style>[hidden]{display:none!important}html{-webkit-text-size-adjust:100%}</style>
+<style id="polish">
+/* Polished look: deep navy, gold and violet. Overrides the base theme, logic untouched. */
+:root,:root[data-theme="light"],:root[data-theme="dark"]{
+  --bg:#090D20;--card:rgba(255,255,255,.07);--ink:#F4F6FF;--dim:#B7C1E4;--line:#3F4C85;
+  --accent:#F5BC45;--on-accent:#1A1203;--soft:#3A2C12;--tile:#2B3563;
+  --good:#7C5CFF;--bad:#FF8F85;--m1:#FFD879;--m2:#D5DCF0;--m3:#E2A272;color-scheme:dark}
+html{background:#090D20}
+body{background:radial-gradient(120% 50% at 50% 0%,#2A2F6B 0%,#121838 45%,#090D20 100%) no-repeat #090D20;min-height:100vh}
+.gold-bg{background:linear-gradient(135deg,#FFEFB8 0%,#F5BC45 45%,#B9791A 100%)}
+header{align-items:center}
+h1{font-size:23px;display:flex;align-items:center;gap:12px}
+h1::before{content:"";flex:none;width:44px;height:44px;border-radius:13px;box-shadow:0 6px 20px rgba(245,188,69,.35);
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpath d='M7 2v22M19 2v22M7 7h12M7 13h12M7 19h12' stroke='%231A1203' stroke-width='2.4' stroke-linecap='round' fill='none'/%3E%3C/svg%3E") center/26px no-repeat,linear-gradient(135deg,#FFEFB8 0%,#F5BC45 45%,#B9791A 100%)}
+.meta{color:#B7C1E4}
+.card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:20px;backdrop-filter:blur(6px)}
+.brief b{color:#FFD879}
+.ladder::before,.ladder::after{width:5px;background:linear-gradient(180deg,#FFEFB8,#F5BC45 45%,#B9791A);opacity:.9}
+.rung::before{display:none}
+.t{border-radius:14px;border:2px solid #4B5A9C;background:#2B3563}
+.t.start{background:linear-gradient(135deg,#FFEFB8 0%,#F5BC45 45%,#B9791A 100%);color:#1A1203;border-color:transparent;box-shadow:0 8px 24px rgba(245,188,69,.3)}
+.t.chg{background:#2B3563;border-color:#F5BC45;color:#FFD879}
+.t.goal{background:#0E1430;border:2px dashed #F5BC45;color:#FFD879}
+.t.win{background:linear-gradient(135deg,#7C5CFF,#4D2FD6);color:#fff;border-color:transparent;box-shadow:0 8px 24px rgba(124,92,255,.45)}
+.t.type{background:#2B3563;border-color:#F5F7FF;color:#fff}
+.t.type.empty{background:#0E1430;border:2px dashed #5A6AA8}
+.msg.good{color:#C9B8FF}
+.btn{border:1px solid #3A4678;background:rgba(255,255,255,.06);color:#F4F6FF;border-radius:14px;min-height:46px;padding:10px 20px}
+.btn.main{background:linear-gradient(135deg,#FFEFB8 0%,#F5BC45 45%,#B9791A 100%);border:0;color:#1A1203;font-weight:800;box-shadow:0 6px 18px rgba(245,188,69,.35)}
+.btn:disabled{opacity:.45}
+.k{height:46px;border-radius:10px;background:linear-gradient(180deg,#27315C,#1B2347);border:1px solid #3A4678;color:#F4F6FF;box-shadow:0 2px 0 #0B1020;max-width:46px}
+.k.w{max-width:70px}
+.k:active{background:#3A4678}
+.win-card{background:linear-gradient(135deg,rgba(124,92,255,.3),rgba(77,47,214,.18));border-color:rgba(160,140,255,.5)}
+.win-card h2{font-size:28px;font-weight:800;letter-spacing:-.5px}
+.stats div{color:#FFD879}
+.guide li::before{background:linear-gradient(135deg,#FFEFB8,#F5BC45 50%,#B9791A)}
+.lb li{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px 14px}
+.lb li.r1{background:linear-gradient(135deg,rgba(245,188,69,.28),rgba(245,188,69,.06));border-color:rgba(245,188,69,.6)}
+.lb li.r2{background:linear-gradient(135deg,rgba(213,220,240,.22),rgba(213,220,240,.05));border-color:rgba(213,220,240,.45)}
+.lb li.r3{background:linear-gradient(135deg,rgba(226,162,114,.26),rgba(226,162,114,.05));border-color:rgba(226,162,114,.5)}
+.lb li.me{outline:2px solid #F5BC45;background:rgba(245,188,69,.16)}
+.lb .rk{font-size:20px}
+.join input{background:#0E1430;border:2px solid #3F4C85;color:#fff;border-radius:14px}
+.tip{background:linear-gradient(135deg,rgba(124,92,255,.35),rgba(77,47,214,.2));border-color:rgba(160,140,255,.5)}
+a.btn.main{color:#1A1203}
+.k.w{font-size:12px;padding:0}
+.join input::placeholder{font-size:13px;letter-spacing:0;text-transform:none}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -171,7 +219,7 @@ a.btn{display:inline-block;text-decoration:none}
     <p class="sub" id="boardNote">Ranked by ladders solved, then fewest extra steps.</p>
     <ol class="lb" id="lb"></ol>
     <form class="join" id="joinForm" hidden>
-      <input id="handleIn" maxlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Initials or handle" aria-label="Your initials or handle">
+      <input id="handleIn" maxlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Your handle" aria-label="Your initials or handle">
       <button class="btn main" type="submit" id="joinBtn">Join the board</button>
     </form>
     <button class="linkbtn" id="chg" type="button" hidden>Change my handle</button>
