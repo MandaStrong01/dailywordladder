@@ -230,6 +230,11 @@ a.btn.main{color:#1A1203}
     <p>The game is free. A tip helps keep a new puzzle coming every day.</p>
     <a class="btn main" id="tipLink" href="#" target="_blank" rel="noopener">Leave a tip</a>
   </section>
+  <section class="card tip" id="inst" hidden>
+    <h2>Get the app</h2>
+    <p id="instNote">Add Daily Word Ladder to your home screen. It opens full screen, like an app.</p>
+    <button class="btn main" id="instBtn" type="button">Install app</button>
+  </section>
   <p class="foot">New ladder every day at midnight Eastern. Same puzzle for every player.</p>
 </div>
 <script>
@@ -478,6 +483,21 @@ $("joinForm").addEventListener("submit",async e=>{
 });
 $("chg").addEventListener("click",()=>{$("joinForm").hidden=false;$("chg").hidden=true;$("handleIn").focus()});
 (async()=>{myPid=await sha("dwl:"+device());if(myHandle)$("handleIn").value=myHandle;loadBoard();setInterval(loadBoard,30000)})();
+
+/* install button: real prompt on Android/Chrome, clear steps on iPhone and iPad */
+(function(){
+  const standalone=window.matchMedia&&matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  if(standalone)return;
+  let dp=null;
+  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e});
+  window.addEventListener("appinstalled",()=>{$("inst").hidden=true});
+  $("inst").hidden=false;
+  $("instBtn").addEventListener("click",async()=>{
+    if(dp){dp.prompt();try{await dp.userChoice}catch(e){}dp=null;return}
+    const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+    $("instNote").textContent=ios?"Tap the Share icon (square with an arrow), then tap Add to Home Screen, then Add.":"Open your browser menu (three dots), then tap Install app or Add to Home Screen.";
+  });
+})();
 
 load(dayNo,"daily");
 /* a page left open rolls over to the new ladder by itself at release time */
