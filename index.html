@@ -1,459 +1,433 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Daily Word Ladder</title>
-    <meta
-      name="description"
-      content="Daily Word Ladder leaderboard and daily challenge. Join the board, solve today’s ladder, and chase your streak."
-    />
-    <meta property="og:title" content="Daily Word Ladder" />
-    <meta
-      property="og:description"
-      content="Daily Word Ladder leaderboard and daily challenge. Join the board, solve today’s ladder, and chase your streak."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://mandastrong01.github.io/dailywordladder/" />
-    <meta property="og:image" content="https://mandastrong01.github.io/dailywordladder/share-card.svg" />
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="Daily Word Ladder" />
-    <meta
-      property="twitter:description"
-      content="Daily Word Ladder leaderboard and daily challenge. Join the board, solve today’s ladder, and chase your streak."
-    />
-    <meta property="twitter:image" content="https://mandastrong01.github.io/dailywordladder/share-card.svg" />
-    <style>
-      :root {
-        --bg: #0d1321;
-        --panel: #121b2d;
-        --panel-2: #1b2a41;
-        --accent: #7dd3fc;
-        --accent-2: #a78bfa;
-        --text: #edf6ff;
-        --muted: #b4cae4;
-        --good: #86efac;
-        --bad: #fca5a5;
-        --warn: #fde68a;
-      }
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Daily Word Ladder</title>
+<link rel="canonical" href="https://mandastrong01.github.io/dailywordladder/">
+<meta name="description" content="A new word ladder every day. Change one letter at a time to reach the end word. Join the leaderboard.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Daily Word Ladder">
+<meta property="og:description" content="A new word ladder every day. Can you climb it in the fewest steps?">
+<meta property="og:url" content="https://mandastrong01.github.io/dailywordladder/">
+<meta property="og:image" content="https://mandastrong01.github.io/dailywordladder/share-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Daily Word Ladder">
+<meta name="twitter:description" content="A new word ladder every day. Can you climb it in the fewest steps?">
+<meta name="twitter:image" content="https://mandastrong01.github.io/dailywordladder/share-card.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@600;800&display=swap">
+<style>
+/* Layout: one centered column. A ladder of word rungs between two rails, keyboard under it. */
+:root{
+  --bg:#EDF0F3; --card:#FFFFFF; --ink:#16212C; --dim:#556270; --line:#C9D1D9;
+  --accent:#B36A00; --on-accent:#FFFFFF; --soft:#F6E3C2; --tile:#E1E7ED;
+  --good:#1B7F55; --bad:#B8322A; --m1:#B07A00; --m2:#6C7A88; --m3:#9A5B2B;
+  --display:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E151C; --card:#16202A; --ink:#E8EEF3; --dim:#98A5B1; --line:#2A3846;
+  --accent:#F2A93B; --on-accent:#1A1100; --soft:#3A2C12; --tile:#1F2B37;
+  --good:#4CC28D; --bad:#F07A70; --m1:#F2C14E; --m2:#B8C4CF; --m3:#D9965B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E151C; --card:#16202A; --ink:#E8EEF3; --dim:#98A5B1; --line:#2A3846;
+  --accent:#F2A93B; --on-accent:#1A1100; --soft:#3A2C12; --tile:#1F2B37;
+  --good:#4CC28D; --bad:#F07A70; --m1:#F2C14E; --m2:#B8C4CF; --m3:#D9965B; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 var(--display);
+  padding-block:20px 28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+h1{margin:0;font-size:28px;line-height:1.05;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+.meta{font:600 12px/1.3 var(--mono);color:var(--dim);text-align:right;letter-spacing:.04em;text-transform:uppercase}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px}
+.brief{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;color:var(--dim);margin-bottom:14px}
+.brief b{color:var(--ink);font-family:var(--mono);letter-spacing:.08em}
+.ladder{position:relative;display:flex;flex-direction:column;gap:10px;padding:2px 22px}
+.ladder::before,.ladder::after{content:"";position:absolute;top:-4px;bottom:-4px;width:3px;border-radius:2px;background:var(--line)}
+.ladder::before{left:4px}.ladder::after{right:4px}
+.rung{position:relative;display:flex;justify-content:center;gap:8px}
+.rung::before{content:"";position:absolute;left:-22px;right:-22px;top:50%;height:3px;margin-top:-1.5px;background:var(--line);border-radius:2px}
+.rung>*{position:relative}
+.t{width:clamp(48px,15vw,60px);aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font:800 clamp(24px,7vw,30px)/1 var(--mono);text-transform:uppercase;background:var(--tile);color:var(--ink);border:2px solid transparent}
+.t.chg{background:var(--accent);color:var(--on-accent)}
+.t.start{background:var(--ink);color:var(--bg)}
+.t.goal{background:var(--card);border:2px dashed var(--accent);color:var(--accent)}
+.t.win{background:var(--good);color:var(--card)}
+.t.type{background:var(--card);border:2px solid var(--ink)}
+.t.type.empty{border-color:var(--line)}
+.rung.shake{animation:sh .35s}
+@keyframes sh{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.tag{position:absolute;right:-4px;top:-8px;font:700 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--card);color:var(--dim);padding:2px 5px;border-radius:4px}
+.msg{min-height:22px;text-align:center;font-size:14px;font-weight:600;color:var(--dim)}
+.msg.bad{color:var(--bad)}.msg.good{color:var(--good)}
+.tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.main{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.kb{display:flex;flex-direction:column;gap:7px}
+.kr{display:flex;justify-content:center;gap:5px}
+.k{flex:1 1 0;min-width:0;max-width:44px;height:50px;border:0;border-radius:7px;background:var(--tile);color:var(--ink);font:700 16px var(--display);text-transform:uppercase}
+.k.w{flex:1.6 1 0;max-width:68px;font-size:13px}
+.k:active{background:var(--line)}
+.win-card{display:none;text-align:center}
+.win-card.on{display:block}
+.win-card h2{margin:0 0 4px;font-size:22px;letter-spacing:-.01em}
+.win-card p{margin:0 0 12px;color:var(--dim)}
+.stats{display:flex;justify-content:center;gap:22px;margin:0 0 14px}
+.stats div{font:800 22px/1 var(--mono)}
+.stats span{display:block;font:600 10px/1.4 var(--display);color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+.guide summary{cursor:pointer;font-weight:800;font-size:17px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.guide summary::-webkit-details-marker{display:none}
+.guide summary::after{content:"+";font:800 20px var(--mono);color:var(--accent)}
+.guide[open] summary::after{content:"\2212"}
+.guide ol{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;counter-reset:s}
+.guide li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;font-size:14px;color:var(--dim)}
+.guide li::before{counter-increment:s;content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--on-accent);font:800 14px/28px var(--mono);text-align:center}
+.guide li b{display:block;color:var(--ink);font-size:15px}
+.eg{display:flex;gap:4px;margin:8px 0 0;flex-wrap:nowrap;align-items:center}
+.eg .t{width:clamp(24px,8vw,32px);font-size:16px;border-radius:6px}
+.eg .arr{color:var(--dim);font:700 14px var(--mono)}
+.foot{font-size:12px;color:var(--dim);text-align:center}
+.tip{text-align:center}
+.tip h2{margin:0 0 4px;font-size:18px}
+.tip p{margin:0 0 12px;font-size:14px;color:var(--dim)}
+a.btn{display:inline-block;text-decoration:none}
 
-      * { box-sizing: border-box; }
+.board h2{margin:0 0 2px;font-size:20px;letter-spacing:-.01em}
+.board .sub{margin:0 0 12px;font-size:13px;color:var(--dim)}
+.lb{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.lb li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:var(--tile)}
+.lb li.me{outline:2px solid var(--accent);outline-offset:-2px}
+.lb .rk{font:800 18px/1 var(--mono);text-align:center;color:var(--dim)}
+.lb li.r1 .rk{color:var(--m1)}.lb li.r2 .rk{color:var(--m2)}.lb li.r3 .rk{color:var(--m3)}
+.lb li.r1,.lb li.r2,.lb li.r3{background:var(--card);border:1px solid var(--line)}
+.lb .nm{font:800 16px/1.2 var(--mono);letter-spacing:.04em;overflow-wrap:anywhere}
+.lb .nm small{font:700 10px var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-left:6px}
+.lb .sc{font:600 12px/1.3 var(--display);color:var(--dim);text-align:right}
+.lb .sc b{display:block;font:800 16px var(--mono);color:var(--ink)}
+.lb .gap{text-align:center;color:var(--dim);background:none;padding:0;font-size:12px;display:block}
+.join{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.join input{flex:1 1 140px;min-width:0;font:800 16px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+.join input:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.linkbtn{background:none;border:0;color:var(--dim);text-decoration:underline;font-size:12px;padding:6px 0}
+@media (prefers-reduced-motion:reduce){.rung.shake{animation:none}}
+</style>
+<style>[hidden]{display:none!important}html{-webkit-text-size-adjust:100%}</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Daily Word Ladder</h1>
+    <div class="meta"><span id="num"></span><br><span id="date"></span></div>
+  </header>
 
-      body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: radial-gradient(circle at top, #14233d, var(--bg) 52%);
-        color: var(--text);
-      }
+  <details class="card guide" id="guide" open>
+    <summary>How to play</summary>
+    <ol>
+      <li><span><b>Read the two words.</b>Your ladder starts at the top word and ends at the dashed word at the bottom.</span></li>
+      <li><span><b>Change one letter.</b>Type a new word that differs from the one above it by exactly one letter. Press Enter to place it.
+        <span class="eg" aria-label="Example"><span class="t start">h</span><span class="t start">a</span><span class="t start">t</span><span class="t start">e</span><span class="arr">&rarr;</span><span class="t start">l</span><span class="t chg">a</span><span class="t start">t</span><span class="t start">e</span></span></span></li>
+      <li><span><b>Use real words.</b>Every rung must be a common four-letter word. No names, and no repeating a word.</span></li>
+      <li><span><b>Reach the bottom word.</b>Stuck? Undo a rung, or take a hint. A hint tells you which letter to change, then the word.</span></li>
+      <li><span><b>Beat the best route.</b>Your step count is compared with the shortest possible ladder. Solve every day to build a streak and climb the leaderboard.</span></li>
+    </ol>
+  </details>
 
-      .wrap {
-        max-width: 980px;
-        margin: 0 auto;
-        padding: 32px 18px 56px;
-      }
+  <section class="card" aria-label="Today's ladder">
+    <div class="brief"><span>Climb from <b id="from"></b> to <b id="to"></b></span><span id="steps">0 steps</span></div>
+    <div class="ladder" id="ladder"></div>
+  </section>
 
-      .hero {
-        background: linear-gradient(135deg, rgba(125,211,252,0.14), rgba(167,139,250,0.12));
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 18px;
-        padding: 24px;
-        margin-bottom: 20px;
-        box-shadow: 0 20px 50px rgba(8, 12, 20, 0.4);
-      }
+  <div class="msg" id="msg" aria-live="polite"></div>
 
-      h1 {
-        margin: 0 0 10px;
-        font-size: clamp(2.1rem, 3vw, 3rem);
-      }
+  <div class="tools" id="tools">
+    <button class="btn" id="undo">Undo</button>
+    <button class="btn" id="hint">Hint</button>
+    <button class="btn" id="practice">Practice ladder</button>
+  </div>
 
-      .sub {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.5;
-      }
+  <section class="card win-card" id="win" aria-live="polite">
+    <h2 id="winTitle"></h2>
+    <p id="winSub"></p>
+    <div class="stats"><div id="sPlayed">0</div><div id="sWin">0</div><div id="sStreak">0</div><div id="sBest">0</div></div>
+    <button class="btn main" id="share">Copy my result</button>
+  </section>
 
-      .grid {
-        display: grid;
-        grid-template-columns: 1.3fr 0.7fr;
-        gap: 18px;
-      }
+  <div class="kb" id="kb" aria-label="Keyboard"></div>
 
-      .card {
-        background: rgba(18,27,45,0.9);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 16px;
-        padding: 18px;
-      }
+  <section class="card board" id="board" aria-label="Leaderboard">
+    <h2>Leaderboard</h2>
+    <p class="sub" id="boardNote">Ranked by ladders solved, then fewest extra steps.</p>
+    <ol class="lb" id="lb"></ol>
+    <form class="join" id="joinForm" hidden>
+      <input id="handleIn" maxlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Initials or handle" aria-label="Your initials or handle">
+      <button class="btn main" type="submit" id="joinBtn">Join the board</button>
+    </form>
+    <button class="linkbtn" id="chg" type="button" hidden>Change my handle</button>
+  </section>
 
-      label {
-        display: block;
-        font-weight: 700;
-        margin-bottom: 8px;
-      }
+  <section class="card tip" id="tip" hidden>
+    <h2>Enjoying the ladder?</h2>
+    <p>The game is free. A tip helps keep a new puzzle coming every day.</p>
+    <a class="btn main" id="tipLink" href="#" target="_blank" rel="noopener">Leave a tip</a>
+  </section>
+  <p class="foot">New ladder every day at midnight Eastern. Same puzzle for every player.</p>
+</div>
+<script>
+const WORDS=new Set("abba able ache acid acne acre acts aero afar agar aged ahem aide airy akin alas ally aloe also alto alum amen amid amor anew ante anti apex aqua arch area aria arid arms army arty atom atop aunt aura auto avid away awry axes axis axle babe baby back bail bait bake bald bale ball balm band bane bang bank barb bard bare bark barn base bash bask bass bath bats bead beak beam bean bear beat beau beef been beer bees beet bell belt bend bent best beta bias bike bile bind bird bite bled blip blob bloc blot blow blue blur boar boat bode body boil bold bolt bomb bond bone bony book boom boon boot bore born boss both bout bowl brag bran brat bray bred brew brig brim brow buck buff bulb bulk bull bump bunk buoy burn burr bury bush bust busy buzz cage cake calf call calm came camp cane cape card care carp cart case cash cask cast cave cell cent chap char chat chef chew chic chin chip chop chow chum cite city clad clam clan clap claw clay clip clog clot club clue coal coat coax code coil coin coke cola cold colt coma comb come cone conn cook cool coop cope copy cord core cork corn corp cost cosy coup cove cozy crab cram crew crib crop crow crux cuba cube cuff cull cult curb curd cure curl curt cute cyst czar dada dade daft dali dame damn damp dang dank dare dark darn dart dash data date davy dawn days dead deaf deal dean dear debt deck deed deem deep deer defy dell dent deny desk dial dice diet digs dill dime dine dire dirk dirt disc dish disk diva dive dock does dogs dole doll dome done doom door dope dora dorm dose dove down drab drag dram draw drew drip drop drug drum dual duck duct dude duel duet duke dull duly dumb dump dune dunk dusk dust duty each earl earn ease east easy eats echo edge edgy edit else emit envy epic even ever evil exam exes exit eyed face fact fade fail fair fake fall fame fang fare farm fast fate fawn fear feat feed feel fell felt fend fern fest feud fiat fife file fill film find fine fire firm fish fist five fizz flag flak flap flat flaw flax flea fled flee flew flex flip flop flow flux foam foil fold folk fond font food fool foot ford fore fork form fort foul four fowl foxy frat fray free fret frog from fuel full fund funk fury fuse fuss fuzz gain gait gala gale gall game gang garb gasp gate gave gaze gear geek geez gene germ gift gill gilt girl gist give glad glam glee glen glow glue goal goat goes gold golf gone gong good goof goon gore gory gosh gout gown grab grad gram gray grew grey grid grim grin grip grit grow grub gulf gull gulp gump guru gust hack hail hair hale half hall halo halt hand hard hare harm harp hash hate haul have hawk haze hazy head heal heap hear heat heck heed heel heir hell helm help hemp herb herd here hero hers hide high hike hill hind hint hire hiss hive hoax hold hole holy home hone honk hood hoof hook hoop hoot hope horn hose host hour howl huge hula hulk hull hump hung hunt hurl hurt hush hymn iced icon idea idle idol imam inca inch indy inks into iota iris iron isle itch item jade jail jazz jeep jerk jest jock join joke jolt jump junk jury just kale keel keen keep kept kern kick kids kill kind king kiss kite kiwi knee knew knit knob knot know lace lack lacy lady laid lair lake lama lamb lame lamp land lane lark lash lass last late lava lawn lazy lead leaf leak lean leap left lend lens lent less lest levy liar lick lied lieu life lift like lily limb lime limo limp line ling link lint lion list lite live load loaf loan lobe loch lock loft logo lone long look loom loop loot lord lore lose loss lost lots loud love luck lull lump lung lure lurk lush lust lynx mace made maid mail main make male mall malt mane mano mans many mare mark mars mart mash mask mass mast mate math mats maul mayo maze mead meal mean meat meek meet melt memo mend menu mere mesa mesh mess mica mice mild mile milk mill mime mind mine mink mint miss mist mite mitt moan moat mock mode mojo mold mole monk mood moon moor more morn moss most moth move much muck mule mull muse mush musk must mute mutt myth nail name nana navy near neat neck need neon ness nest news newt next nice nick nile nine node noir none nook noon nope nora norm nose note noun nova nude null numb oath obey odds odor ogre ohio oily omen once only onto opal open oral ouch ours oust oval oven over oxen pace pack pact page pain pair pale palm pane pang pant papa para park part pass past path pave pawn peak pear peat peck peek peel peep peer pent perk perm pest phew pick pied pier pike pile pill pine ping pink pint pipe pita pity plan plat play plea plot plow plug plum plus poem poet poke pole poll polo poly pond pony poof pooh pool poor pope pore pork port pose posh post pour pray prep prey prob prod prof prop puck puff pull pulp puma pump punk punt pure push puss putt quad quid quit quiz race rack raft rage raid rail rain raja rake rama ramp rang rank rant rare rash rate rave read real reap rear redo reed reef reel rein rely rent reps rest rice rich ride rife riff rift ring rink riot ripe rise risk rite road roam roar robe rock rode role rolf roll roof rook room root rope rose rosy rote rout ruby rude rudy ruin rule rump rune rung ruse rush rust sack safe saga sage said sail sake sale salt same sand sane sang sank sari sash sass save scam scan scar scat scum seal seam seat sect seed seek seem seen seer self sell send sent sewn shah sham shed shin ship shoe shop shot show shun shut sick side sift sigh sign silk sill silo silt sing sink sire site size skew skid skim skin skip slab slag slam slap slay sled slew slid slim slip slit slot slow slug slum slur smog smug snag snap snob snot snow snub snug soak soap soar sock soda sofa soft soil sold sole solo soma some song sons soon soot sore sort soul soup sour spam span spar spat spec sped spew spin spit spot spun spur stab stag star stay stem step stew stir stop stow stub stud stun such suck suit sumo sung sunk sure surf swag swam swan swap swat sway swim sync tack tact tail take tale talk tall tame tang tank tape taps taro tarp tart task taut taxi teal team tear tech teen tell temp tend tent term test text thai than that thaw thee them then they thin this thou thud thug thus tick tide tidy tied tier tiff tile till tilt time tina ting tint tiny tire toad tofu toil told toll tomb tome tone tong took tool toon toot tops tore torn toro toss tote tour tout town tram trap tray tree trek trey trim trio trip trot true tube tuck tuff tuna tune turf turn tusk twig twin type typo tyre ugly undo unit unto upon urge used user vain vale vane vary vase vast veal veer veil vein vent verb vert very vest veto vice view vile vine visa vita viva void volt vote wade wage wail wait wake walk wall wand want ward ware warm warn warp wary wash wasp watt wave wavy ways weak wear weed week weep weir weld well went wept were west what when whew whey whig whim whip whit whiz whoa whom wick wide wife wild will wilt wind wine wing wink wipe wire wise wish with woke wolf womb wood woof wool word wore work worm worn wrap wren writ yank yard yarn yawn yeah year yell yelp yoga yoke your yuck zeal zero zest zinc zone zoom".split(" "));
+const PUZ="hate-love fear-hope cold-warm sick-well rage-calm lost-find weak-bold hard-easy fail-gain mean-kind slow-fast fall-rise rude-kind cave-home mess-neat fool-wise pain-calm doom-work bend-most seat-gave soil-cork make-bowl take-port coma-ward dead-wall soup-ease chop-sore vast-deal pulp-fail bulb-till calm-lake bale-sent show-fled some-earl pier-herd spam-stop warm-pony shin-boil trip-brew half-bulk prey-flew feud-sack till-soil tend-pike herd-name boom-firm lane-rest lamp-hold wage-seem trap-draw trim-grew feed-bald cite-kind cord-leak rule-pity cope-sale fund-pace mock-bend raid-lean dome-took moss-sunk fair-coat bore-coil verb-mars warn-gave lake-bank year-flee here-task vice-hold worm-goat atom-seem load-sure gift-fill lamb-pipe ripe-maze root-dock wore-damp soft-vine hawk-dame aunt-line grew-chap pass-tore flaw-hair file-hood hurt-lime very-bake host-thin tide-bone prof-grab kind-salt rode-dash hook-rank cart-film dish-type mall-cone bank-wing jury-zone mare-lots crop-boat grip-prep deaf-wind side-mate meal-bull come-head wise-cake roof-bond tank-poke cozy-tune gore-rant glow-fuel flag-dust than-meat loan-cork beer-bend maze-bowl late-burn next-bone slam-sick swim-chap dude-gold calf-book maid-leaf nest-sort tone-tall your-chin lime-maid tire-ford time-fair came-lend film-head many-tire poem-fire fork-pike copy-tell city-loss rock-left cool-gene gill-east eats-gave cold-land rite-bash hall-mute slim-than step-flex easy-near punk-hall poke-goal plot-flee keen-tree halt-moon mist-code bolt-part rare-sand gray-clan bush-near know-stop card-polo bark-bent folk-cave bait-folk none-maze rush-come list-fire tear-roof rant-wife suck-lost quit-swap soul-file then-host chap-poem mars-fund debt-cell herb-sole teen-wind aide-fork doll-fast wire-fort gang-hall knee-stop like-bind part-sell bell-cook foam-bent sore-easy life-font good-cent prop-then four-coke dial-loud coal-tank gale-west cute-lame duke-risk item-dean prep-show corn-take vary-dire hope-main play-chew cash-nail band-look halo-coil rage-bolt golf-tile bake-rule wide-sick drew-shop wife-loss hint-pack girl-coil poll-hunt fond-wade hunt-fund town-foil mesh-live chef-blow pure-base pine-bash rent-cope deal-lump nice-sunk papa-cute port-cash wind-pull pill-hare sang-font vote-here yard-peel null-heal leap-dire coat-same meat-they tiny-torn boss-dire noun-cool burn-mine soon-tell bike-wait draw-tray deer-bone hail-damp tale-feat food-coin with-east grow-coin duck-sage farm-cola crew-grim mark-coat coil-prop swan-chip hale-rich bare-rudy curb-five palm-rack drag-flow dual-neat pack-tall dumb-limb vein-fair live-rope nine-ease fill-damp seen-shin sort-back chip-sore lure-soap hack-zoom move-tube back-pill dump-limb else-cone lean-fish need-rant vain-felt pain-bell harm-fury hate-vice love-name lame-peak dawn-ford firm-duel heal-mall mean-lent ring-rash tops-bake wool-ripe polo-pact laid-mere fire-dent cove-fury rise-yarn fast-gift riot-soup skin-free luck-lust boil-soft earn-rush bust-have fell-pose heel-sand away-spun hash-lack cure-pill seek-bang lord-bear pact-cold scam-show oath-sang quiz-shot shop-prof akin-coal hare-poet tour-sole race-leaf cell-mist lock-fool book-dime grim-glow sung-role tube-soup told-face leaf-just flee-will scar-shin dear-soil slip-lock dash-rest fort-mare sane-side pose-wine shut-quit ride-wood core-back watt-bird lawn-word bowl-fair full-nest post-keen rain-lean toll-firm dire-cord name-read ruin-fell geek-land unit-shot rift-sand coup-tall deny-done tied-feel have-toss toss-pool been-flaw cast-earn rail-mile bone-heck text-sold bang-port spin-corn tuna-cork neck-fine dive-bank reed-dire tick-fond yarn-bend camp-miss dice-junk disk-sage pray-drop pipe-vest mate-monk grid-prop puck-wing bird-beam nail-band wing-lens rest-date ease-bird soak-stir care-just bury-debt bout-coke nose-hard grab-trio solo-down chew-stop milk-with pony-coma span-twin gown-cure down-soil find-read want-neck grey-trip fare-sent".split(" ");
+const EPOCH=Date.UTC(2026,0,1);
+const OFFSET=96;
 
-      input, button {
-        width: 100%;
-        border-radius: 12px;
-        border: 1px solid rgba(255,255,255,0.1);
-        font-size: 1rem;
-      }
+/* date and puzzle pick: the same ladder for everyone on the same local day */
+/* one release time for everyone: a new ladder goes live at midnight Eastern (Toronto) */
+function currentDay(){
+  try{
+    const p=new Intl.DateTimeFormat("en-CA",{timeZone:"America/Toronto",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+    const g=t=>Number(p.find(x=>x.type===t).value);
+    return Math.floor((Date.UTC(g("year"),g("month")-1,g("day"))-EPOCH)/86400000);
+  }catch(e){const n=new Date();return Math.floor((Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())-EPOCH)/86400000)}
+}
+let dayNo=currentDay();
+let mode="daily", puzzleNo=dayNo, from="", to="";
+let path=[], cur="", won=false, hintStep=0, hintsUsed=0;
 
-      input {
-        background: rgba(255,255,255,0.04);
-        color: var(--text);
-        padding: 12px 14px;
-        outline: none;
-      }
+const $=id=>document.getElementById(id);
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
-      button {
-        background: linear-gradient(135deg, var(--accent), var(--accent-2));
-        color: #07101d;
-        font-weight: 800;
-        padding: 12px 16px;
-        border: none;
-        cursor: pointer;
-        transition: transform 0.14s ease, opacity 0.14s ease;
-      }
+function oneApart(a,b){let d=0;for(let i=0;i<4;i++)if(a[i]!==b[i])d++;return d===1}
+function shortest(a,b){
+  if(a===b)return[a];
+  const prev={[a]:null},q=[a];
+  for(let h=0;h<q.length;h++){
+    const u=q[h];
+    for(let i=0;i<4;i++)for(let c=97;c<123;c++){
+      const ch=String.fromCharCode(c);if(ch===u[i])continue;
+      const n=u.slice(0,i)+ch+u.slice(i+1);
+      if(WORDS.has(n)&&!(n in prev)){prev[n]=u;if(n===b){const p=[b];let x=u;while(x){p.unshift(x);x=prev[x]}return p}q.push(n)}
+    }
+  }
+  return null;
+}
 
-      button:hover { transform: translateY(-1px); }
-      button:active { transform: translateY(0); }
+function load(pn,m){
+  mode=m;puzzleNo=pn;
+  const s=PUZ[(((pn+OFFSET)%PUZ.length)+PUZ.length)%PUZ.length].split("-");
+  from=s[0];to=s[1];
+  path=[from];cur="";won=false;hintStep=0;hintsUsed=0;
+  if(m==="daily"){const sv=store.get("dwl_day_"+pn);if(sv&&Array.isArray(sv.path)&&sv.path[0]===from){path=sv.path;won=path[path.length-1]===to;hintsUsed=sv.hints||0}}
+  $("num").textContent=(m==="daily"?"No. ":"Practice ")+(m==="daily"?pn+1:"");
+  $("date").textContent=m==="daily"?new Date(EPOCH+pn*86400000).toLocaleDateString(undefined,{month:"short",day:"numeric",timeZone:"UTC"}):"";
+  $("from").textContent=from.toUpperCase();$("to").textContent=to.toUpperCase();
+  setMsg("");render();
+}
+function saveDay(){if(mode==="daily")store.set("dwl_day_"+puzzleNo,{path,hints:hintsUsed})}
 
-      .row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
+function tile(ch,cls){const d=document.createElement("div");d.className="t "+cls;d.textContent=ch;return d}
+function render(){
+  const L=$("ladder");L.textContent="";
+  path.forEach((w,r)=>{
+    const row=document.createElement("div");row.className="rung";
+    const last=r===path.length-1;
+    for(let i=0;i<4;i++){
+      let cls="";
+      if(r===0)cls="start";
+      else if(won&&last)cls="win";
+      else if(w[i]!==path[r-1][i])cls="chg";
+      row.appendChild(tile(w[i],cls));
+    }
+    L.appendChild(row);
+  });
+  if(!won){
+    const row=document.createElement("div");row.className="rung";row.id="typing";
+    for(let i=0;i<4;i++){const ch=cur[i]||"";row.appendChild(tile(ch,"type"+(ch?"":" empty")))}
+    L.appendChild(row);
+    const g=document.createElement("div");g.className="rung";
+    for(let i=0;i<4;i++)g.appendChild(tile(to[i],"goal"));
+    L.appendChild(g);
+  }
+  const n=path.length-1;
+  $("steps").textContent=n+(n===1?" step":" steps");
+  $("undo").disabled=won||path.length<2;
+  $("hint").disabled=won;
+  $("win").classList.toggle("on",won);
+  $("kb").style.display=won?"none":"";
+  if(won)showWin();
+}
+function setMsg(t,k){const m=$("msg");m.textContent=t;m.className="msg"+(k?" "+k:"")}
+function bad(t){setMsg(t,"bad");const r=$("typing");if(r){r.classList.remove("shake");void r.offsetWidth;r.classList.add("shake")}}
 
-      .stack {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
+function press(ch){if(won)return;if(cur.length<4){cur+=ch;setMsg("");render()}}
+function back(){if(won)return;cur=cur.slice(0,-1);setMsg("");render()}
+function submit(){
+  if(won)return;
+  if(cur.length<4){bad("Type a four-letter word.");return}
+  const last=path[path.length-1];
+  if(cur===last){bad("That is the word you are on.");return}
+  if(!oneApart(last,cur)){bad("Change exactly one letter.");return}
+  if(!WORDS.has(cur)){bad("That word is not in the list.");return}
+  if(path.includes(cur)){bad("You already used that word.");return}
+  path.push(cur);cur="";hintStep=0;
+  if(path[path.length-1]===to){won=true;finish()}
+  saveDay();render();
+  if(!won)setMsg("")
+}
+function undo(){if(won||path.length<2)return;path.pop();cur="";hintStep=0;setMsg("");saveDay();render()}
+function hint(){
+  if(won)return;
+  const last=path[path.length-1];
+  const p=shortest(last,to);
+  if(!p||p.length<2){setMsg("No route from here. Try Undo.","bad");return}
+  const next=p[1];let pos=0;for(let i=0;i<4;i++)if(last[i]!==next[i])pos=i;
+  hintsUsed++;
+  if(hintStep===0){setMsg("Change letter "+(pos+1)+" of "+last.toUpperCase()+".");hintStep=1}
+  else{setMsg("Try "+next.toUpperCase()+".");hintStep=2}
+  saveDay();
+}
+function par(){const p=shortest(from,to);return p?p.length-1:path.length-1}
+function finish(){
+  if(mode!=="daily")return;
+  const steps=path.length-1,p=par();
+  const st=store.get("dwl_stats")||{played:0,wins:0,streak:0,best:0,last:-9,over:0};
+  if(st.last!==puzzleNo){
+    st.played++;st.wins++;
+    st.streak=(st.last===puzzleNo-1)?st.streak+1:1;
+    st.best=Math.max(st.best,st.streak);st.last=puzzleNo;
+    st.over=(st.over||0)+Math.max(0,steps-p);
+    store.set("dwl_stats",st);
+  }
+  pushWin(steps,p);
+}
+function showWin(){
+  const steps=path.length-1,p=par();
+  $("winTitle").textContent=steps===p?"Perfect ladder":"Ladder climbed";
+  $("winSub").textContent=from.toUpperCase()+" to "+to.toUpperCase()+" in "+steps+(steps===1?" step":" steps")+". Best possible: "+p+"."+(hintsUsed?" Hints used: "+hintsUsed+".":"");
+  const st=store.get("dwl_stats")||{played:0,wins:0,streak:0,best:0};
+  const row=(id,v,l)=>{$(id).innerHTML=v+"<span>"+l+"</span>"};
+  row("sPlayed",st.played,"Played");row("sWin",st.wins,"Solved");row("sStreak",st.streak,"Streak");row("sBest",st.best,"Best streak");
+  $("share").textContent="Copy my result";
+  $("practice").textContent=mode==="daily"?"Practice ladder":"Another practice";
+}
+function shareText(){
+  const steps=path.length-1,p=par();
+  const bar=path.slice(1).map((w,i)=>{let k=0;for(let j=0;j<4;j++)if(w[j]!==path[i][j])k=j;return[0,1,2,3].map(j=>j===k?"\uD83D\uDFE7":"\u2B1B").join("")}).join("\n");
+  return "Daily Word Ladder "+(mode==="daily"?"No. "+(puzzleNo+1):"(practice)")+"\n"+from.toUpperCase()+" → "+to.toUpperCase()+"\n"+steps+" steps (best "+p+")"+(hintsUsed?", "+hintsUsed+" hints":"")+"\n"+bar;
+}
+async function copyResult(){
+  const t=shareText();
+  try{await navigator.clipboard.writeText(t);$("share").textContent="Copied";return}catch(e){}
+  const ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();
+  let ok=false;try{ok=document.execCommand("copy")}catch(e){}
+  ta.remove();$("share").textContent=ok?"Copied":"Select and copy from the box below";
+  if(!ok){const pre=document.createElement("pre");pre.textContent=t;pre.style.cssText="text-align:left;white-space:pre-wrap;user-select:all;margin:12px 0 0;font:600 14px var(--mono)";$("win").appendChild(pre)}
+}
 
-      .status {
-        min-height: 24px;
-        margin-top: 12px;
-        font-size: 0.96rem;
-        color: var(--muted);
-      }
+/* keyboard */
+const rows=[["q","w","e","r","t","y","u","i","o","p"],["a","s","d","f","g","h","j","k","l"],["enter","z","x","c","v","b","n","m","back"]];
+const kb=$("kb");
+rows.forEach(r=>{
+  const d=document.createElement("div");d.className="kr";
+  r.forEach(k=>{
+    const b=document.createElement("button");b.className="k"+(k.length>1?" w":"");b.type="button";
+    b.textContent=k==="enter"?"Enter":k==="back"?"⌫":k;
+    if(k==="back")b.setAttribute("aria-label","Delete");
+    b.addEventListener("click",()=>k==="enter"?submit():k==="back"?back():press(k));
+    d.appendChild(b);
+  });
+  kb.appendChild(d);
+});
+document.addEventListener("keydown",e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.key==="Enter"){if(document.activeElement&&document.activeElement.tagName==="BUTTON")return;e.preventDefault();submit()}
+  else if(e.key==="Backspace"){e.preventDefault();back()}
+  else if(/^[a-zA-Z]$/.test(e.key))press(e.key.toLowerCase());
+});
+$("undo").addEventListener("click",undo);
+$("hint").addEventListener("click",hint);
+$("share").addEventListener("click",copyResult);
+$("practice").addEventListener("click",()=>{const n=Math.floor(Math.random()*PUZ.length);load(n,"practice");window.scrollTo(0,0)});
 
-      .status.error { color: var(--bad); }
-      .status.success { color: var(--good); }
-      .status.warn { color: var(--warn); }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-      }
+/* tip jar: the button appears only when a link is set here */
+const TIP_URL="https://paypal.me/dailywordladder";
+if(TIP_URL){$("tipLink").href=TIP_URL;$("tip").hidden=false}
+try{if(localStorage.getItem("dwl_seen")==="1")$("guide").open=false}catch(e){}
+$("guide").addEventListener("toggle",()=>{try{if(!$("guide").open)localStorage.setItem("dwl_seen","1")}catch(e){}});
 
-      th, td {
-        text-align: left;
-        padding: 10px 8px;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-      }
+/* leaderboard: shared board in Supabase, works in any browser (no Claude needed) */
+const SB="https://wvkqnrqcnoztajxxzyxc.supabase.co",KEY="sb_publishable_5hcJCP8NshazpVLDNMDxlw_Ic5AOiyV";
+let lbRows=[],myHandle=store.get("dwl_handle")||"",myPid="",boardOk=false;
+function device(){let d=store.get("dwl_dev");if(!d||typeof d!=="string"){d=(crypto.randomUUID?crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&3|8)).toString(16)}));store.set("dwl_dev",d)}return d}
+async function sha(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("")}
+function cleanHandle(v){return String(v||"").toUpperCase().replace(/[^A-Z0-9_.-]/g,"").slice(0,10)}
+function sortRows(a){return a.slice().sort((x,y)=>(y.solved||0)-(x.solved||0)||(x.over||0)-(y.over||0)||(y.streak||0)-(x.streak||0)||String(x.handle).localeCompare(String(y.handle)))}
+function renderBoard(){
+  const ol=$("lb");ol.textContent="";
+  if(!boardOk){return}
+  const sorted=sortRows(lbRows.filter(r=>r.handle));
+  const top=sorted.slice(0,10);
+  const myIdx=sorted.findIndex(r=>r.pid===myPid);
+  const add=(r,i)=>{
+    const li=document.createElement("li");
+    li.className=(i<3?"r"+(i+1):"")+(r.pid===myPid?" me":"");
+    const rk=document.createElement("span");rk.className="rk";rk.textContent=i+1;
+    const nm=document.createElement("span");nm.className="nm";nm.textContent=r.handle;
+    if(r.pid===myPid){const sm=document.createElement("small");sm.textContent="you";nm.appendChild(sm)}
+    const sc=document.createElement("span");sc.className="sc";
+    const b=document.createElement("b");b.textContent=r.solved||0;
+    sc.appendChild(b);sc.appendChild(document.createTextNode("solved · streak "+(r.streak||0)));
+    li.append(rk,nm,sc);ol.appendChild(li);
+  };
+  top.forEach((r,i)=>add(r,i));
+  if(myIdx>=10){const g=document.createElement("li");g.className="gap";g.textContent="…";ol.appendChild(g);add(sorted[myIdx],myIdx)}
+  if(!sorted.length){const li=document.createElement("li");li.className="gap";li.textContent="No players yet. Join and be number one.";ol.appendChild(li)}
+  const has=!!myHandle&&myIdx>=0;
+  $("joinForm").hidden=has;
+  $("chg").hidden=!has;
+}
+async function loadBoard(){
+  try{
+    const r=await fetch(SB+"/rest/v1/ladder_players?select=pid,handle,solved,streak,best,over&order=solved.desc,over.asc,streak.desc&limit=200",{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});
+    if(!r.ok)throw 0;
+    lbRows=await r.json();boardOk=true;
+    $("boardNote").textContent="Ranked by ladders solved, then fewest extra steps.";
+    renderBoard();
+  }catch(e){if(!boardOk)$("boardNote").textContent="The leaderboard is unavailable right now."}
+}
+async function callScore(body){
+  const r=await fetch(SB+"/functions/v1/ladder-score",{method:"POST",headers:{"Content-Type":"application/json",apikey:KEY,Authorization:"Bearer "+KEY},body:JSON.stringify(Object.assign({device:device()},body))});
+  let j=null;try{j=await r.json()}catch(e){}
+  if(!r.ok)throw new Error((j&&(j.error||j.message))||"Request failed.");
+  return j;
+}
+async function pushWin(steps,p){
+  if(mode!=="daily"||!myHandle)return;
+  try{await callScore({action:"win",handle:myHandle,day:puzzleNo,steps:steps,par:p});loadBoard()}catch(e){}
+}
+$("joinForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const h=cleanHandle($("handleIn").value);
+  if(h.length<2){$("boardNote").textContent="Use 2 to 10 letters or numbers.";return}
+  $("joinBtn").disabled=true;
+  try{
+    await callScore({action:"join",handle:h});
+    myHandle=h;store.set("dwl_handle",h);
+    if(won)await pushWin(path.length-1,par());
+    await loadBoard();
+  }catch(err){$("boardNote").textContent=err.message||"Could not join. Try again."}
+  $("joinBtn").disabled=false;
+});
+$("chg").addEventListener("click",()=>{$("joinForm").hidden=false;$("chg").hidden=true;$("handleIn").focus()});
+(async()=>{myPid=await sha("dwl:"+device());if(myHandle)$("handleIn").value=myHandle;loadBoard();setInterval(loadBoard,30000)})();
 
-      th {
-        color: var(--muted);
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-      }
-
-      .muted {
-        color: var(--muted);
-      }
-
-      .config-box {
-        background: rgba(255,255,255,0.04);
-        border: 1px dashed rgba(255,255,255,0.12);
-        border-radius: 12px;
-        padding: 12px;
-        color: var(--muted);
-        line-height: 1.5;
-      }
-
-      @media (max-width: 760px) {
-        .grid { grid-template-columns: 1fr; }
-        .row { grid-template-columns: 1fr; }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <section class="hero">
-        <h1>Daily Word Ladder</h1>
-        <p class="sub">
-          Join the board, solve today’s ladder, and keep your streak alive.
-        </p>
-      </section>
-
-      <div class="grid">
-        <div class="stack">
-          <div class="card">
-            <form id="join-form" class="stack">
-              <div>
-                <label for="handle">Handle</label>
-                <input id="handle" type="text" maxlength="10" placeholder="Example: Waxer_7" />
-              </div>
-              <button type="submit">Join leaderboard</button>
-            </form>
-            <div id="join-status" class="status"></div>
-          </div>
-
-          <div class="card">
-            <form id="solve-form" class="stack">
-              <div class="row">
-                <div>
-                  <label for="steps">Steps</label>
-                  <input id="steps" type="number" min="1" max="40" value="4" />
-                </div>
-                <div>
-                  <label for="par">Par</label>
-                  <input id="par" type="number" min="1" max="40" value="5" />
-                </div>
-              </div>
-              <button type="submit">Submit win</button>
-            </form>
-            <div id="solve-status" class="status"></div>
-          </div>
-        </div>
-
-        <aside class="card">
-          <h2>Leaderboard</h2>
-          <div class="muted">Updated every 30 seconds</div>
-          <table aria-label="Daily word ladder leaderboard">
-            <thead>
-              <tr>
-                <th>Handle</th>
-                <th>Solved</th>
-                <th>Streak</th>
-                <th>Best</th>
-                <th>Over</th>
-              </tr>
-            </thead>
-            <tbody id="leaderboard-body"></tbody>
-          </table>
-        </aside>
-      </div>
-
-      <div class="card" style="margin-top: 18px;">
-        <h3>Setup</h3>
-        <div class="config-box">
-          Replace the publishable key below with your Supabase project publishable key from the Supabase dashboard, then push this file to GitHub Pages.
-        </div>
-        <div id="config-status" class="status" style="margin-top: 12px;"></div>
-      </div>
-    </div>
-
-    <script>
-      const SUPABASE_URL = 'https://wvkqnrqcnoztajxxzyxc.supabase.co';
-      const SUPABASE_ANON_KEY = 'const SUPABASE_ANON_KEY = 'sb_publishable_5hcJCP8NshazpVLDNMDxlw_Ic5AOiyV';';
-      const BAD_WORDS = ['BAD', 'BANNED', 'HATE', 'FUCK', 'SHIT', 'DAMN'];
-      const STORAGE_KEY = 'dwl_dev';
-
-      function setStatus(el, msg, type = '') {
-        el.textContent = msg;
-        el.className = 'status';
-        if (type) el.classList.add(type);
-      }
-
-      function setDevice() {
-        let value = localStorage.getItem(STORAGE_KEY);
-        if (!value) {
-          value = crypto.randomUUID();
-          localStorage.setItem(STORAGE_KEY, value);
-        }
-        return value;
-      }
-
-      async function sha256(value) {
-        const data = new TextEncoder().encode(value);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        const bytes = Array.from(new Uint8Array(hashBuffer));
-        return '0x' + bytes.map((b) => b.toString(16).padStart(2, '0')).join('');
-      }
-
-      function getPlayerId(device) {
-        return sha256('dwl:' + device);
-      }
-
-      function normalizeHandle(raw) {
-        const cleaned = (raw || '').trim().replace(/[^A-Za-z0-9_.-]/g, '').slice(0, 10);
-        return cleaned.toUpperCase();
-      }
-
-      function validateHandle(handle) {
-        const normalized = normalizeHandle(handle);
-        if (normalized.length < 2 || normalized.length > 10) {
-          return 'Handle must be 2 to 10 characters.';
-        }
-        if (!/^[A-Z0-9_.-]+$/.test(normalized)) {
-          return 'Only A-Z, 0-9, _, ., and - are allowed.';
-        }
-        if (BAD_WORDS.some((word) => normalized.includes(word))) {
-          return 'That handle is not allowed.';
-        }
-        return normalized;
-      }
-
-      function getDayNumberToronto() {
-        const now = new Date();
-        const torontoString = now.toLocaleString('en-US', { timeZone: 'America/Toronto' });
-        const torontoDate = new Date(torontoString);
-        const start = new Date('2026-01-01T00:00:00-05:00');
-        const diffDays = Math.floor((torontoDate.getTime() - start.getTime()) / 86400000);
-        return diffDays;
-      }
-
-      async function callEdgeFunction(payload) {
-        if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes('PASTE_')) {
-          throw new Error('Add your publishable key before using the leaderboard.');
-        }
-
-        const res = await fetch(`${SUPABASE_URL}/functions/v1/ladder-score`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const text = await res.text();
-        let data = null;
-        try { data = text ? JSON.parse(text) : null; } catch (error) {
-          data = { message: text || 'Unknown error' };
-        }
-
-        if (!res.ok) {
-          const message = data?.message || data?.error || 'Request failed.';
-          throw new Error(message);
-        }
-
-        return data;
-      }
-
-      async function joinLeaderboard(event) {
-        event.preventDefault();
-        const handleInput = document.getElementById('handle');
-        const validated = validateHandle(handleInput.value);
-        if (validated && typeof validated === 'string' && validated.length > 0 && !/^[A-Z0-9_.-]+$/.test(validated)) {
-          setStatus(document.getElementById('join-status'), validated, 'error');
-          return;
-        }
-
-        if (typeof validated !== 'string' || validated.length < 2) {
-          setStatus(document.getElementById('join-status'), validated || 'Invalid handle.', 'error');
-          return;
-        }
-
-        const device = setDevice();
-        const payload = {
-          action: 'join',
-          device,
-          handle: validated,
-          day: getDayNumberToronto()
-        };
-
-        try {
-          const result = await callEdgeFunction(payload);
-          handleInput.value = validated;
-          setStatus(document.getElementById('join-status'), result?.message || 'Joined successfully.', 'success');
-          await loadLeaderboard();
-        } catch (error) {
-          const msg = (error.message || '').includes('That handle is taken') ? 'That handle is taken.' : error.message || 'Unable to join.';
-          setStatus(document.getElementById('join-status'), msg, 'error');
-        }
-      }
-
-      async function submitWin(event) {
-        event.preventDefault();
-        const handleInput = document.getElementById('handle');
-        const stepsInput = document.getElementById('steps');
-        const parInput = document.getElementById('par');
-
-        const handle = validateHandle(handleInput.value);
-        if (typeof handle !== 'string' || handle.length < 2) {
-          setStatus(document.getElementById('solve-status'), handle || 'Please join first.', 'error');
-          return;
-        }
-
-        const steps = Number(stepsInput.value);
-        const par = Number(parInput.value);
-        if (!Number.isInteger(steps) || steps < 1 || steps > 40) {
-          setStatus(document.getElementById('solve-status'), 'Steps must be 1 to 40.', 'error');
-          return;
-        }
-        if (!Number.isInteger(par) || par < 1 || par > 40) {
-          setStatus(document.getElementById('solve-status'), 'Par must be 1 to 40.', 'error');
-          return;
-        }
-
-        try {
-          const result = await callEdgeFunction({
-            action: 'win',
-            device: setDevice(),
-            handle,
-            day: getDayNumberToronto(),
-            steps,
-            par
-          });
-          setStatus(document.getElementById('solve-status'), result?.message || 'Solved.', 'success');
-          await loadLeaderboard();
-        } catch (error) {
-          setStatus(document.getElementById('solve-status'), error.message || 'Unable to submit win.', 'error');
-        }
-      }
-
-      async function loadLeaderboard() {
-        const body = document.getElementById('leaderboard-body');
-        try {
-          if (!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes('PASTE_')) {
-            body.innerHTML = '<tr><td colspan="5" class="muted">Add your Supabase publishable key to enable the board.</td></tr>';
-            setStatus(document.getElementById('config-status'), 'Publishable key missing.', 'warn');
-            return;
-          }
-
-          const url = `${SUPABASE_URL}/rest/v1/ladder_players?select=handle,solved,streak,best,over&order=solved.desc,over.asc,best.desc&limit=50`;
-          const res = await fetch(url, {
-            headers: {
-              apikey: SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`
-            }
-          });
-
-          if (!res.ok) throw new Error('Board failed to load.');
-          const rows = await res.json();
-
-          if (!rows.length) {
-            body.innerHTML = '<tr><td colspan="5" class="muted">No players yet — join the ladder.</td></tr>';
-            setStatus(document.getElementById('config-status'), 'Board connected.', 'success');
-            return;
-          }
-
-          body.innerHTML = rows.map((row) => `
-            <tr>
-              <td>${row.handle}</td>
-              <td>${row.solved}</td>
-              <td>${row.streak}</td>
-              <td>${row.best}</td>
-              <td>${row.over}</td>
-            </tr>
-          `).join('');
-          setStatus(document.getElementById('config-status'), 'Board connected.', 'success');
-        } catch (error) {
-          body.innerHTML = '<tr><td colspan="5" class="muted">Board unavailable right now.</td></tr>';
-          setStatus(document.getElementById('config-status'), error.message || 'Board unavailable.', 'error');
-        }
-      }
-
-      document.getElementById('join-form').addEventListener('submit', joinLeaderboard);
-      document.getElementById('solve-form').addEventListener('submit', submitWin);
-      setDevice();
-      loadLeaderboard();
-      setInterval(loadLeaderboard, 30000);
-    </script>
-  </body>
+load(dayNo,"daily");
+/* a page left open rolls over to the new ladder by itself at release time */
+setInterval(()=>{const d=currentDay();if(d!==dayNo){dayNo=d;if(mode==="daily")load(d,"daily")}},30000);
+</script>
+</body>
 </html>
