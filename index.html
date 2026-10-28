@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Daily Word Ladder</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#090D20">
+<meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Word Ladder">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -127,11 +127,11 @@ a.btn{display:inline-block;text-decoration:none}
 <style id="polish">
 /* Polished look: deep navy, gold and violet. Overrides the base theme, logic untouched. */
 :root,:root[data-theme="light"],:root[data-theme="dark"]{
-  --bg:#090D20;--card:rgba(255,255,255,.07);--ink:#F4F6FF;--dim:#B7C1E4;--line:#3F4C85;
-  --accent:#F5BC45;--on-accent:#1A1203;--soft:#3A2C12;--tile:#2B3563;
+  --bg:#000000;--card:rgba(255,255,255,.06);--ink:#F4F6FF;--dim:#B7C1E4;--line:#3B3470;
+  --accent:#F5BC45;--on-accent:#1A1203;--soft:#3A2C12;--tile:#1A1633;
   --good:#7C5CFF;--bad:#FF8F85;--m1:#FFD879;--m2:#D5DCF0;--m3:#E2A272;color-scheme:dark}
-html{background:#090D20}
-body{background:radial-gradient(120% 50% at 50% 0%,#2A2F6B 0%,#121838 45%,#090D20 100%) no-repeat #090D20;min-height:100vh}
+html{background:#000}
+body{background:radial-gradient(120% 40% at 50% 0%,#1E1245 0%,#0A0618 45%,#000 100%) no-repeat #000;min-height:100vh}
 .gold-bg{background:linear-gradient(135deg,#FFEFB8 0%,#F5BC45 45%,#B9791A 100%)}
 header{align-items:center}
 h1{font-size:23px;display:flex;align-items:center;gap:12px}
@@ -142,21 +142,21 @@ h1::before{content:"";flex:none;width:44px;height:44px;border-radius:13px;box-sh
 .brief b{color:#FFD879}
 .ladder::before,.ladder::after{width:5px;background:linear-gradient(180deg,#FFEFB8,#F5BC45 45%,#B9791A);opacity:.9}
 .rung::before{display:none}
-.t{border-radius:14px;border:2px solid #4B5A9C;background:#2B3563}
+.t{border-radius:14px;border:2px solid #3B3470;background:#1A1633}
 .t.start{background:linear-gradient(135deg,#FFEFB8 0%,#F5BC45 45%,#B9791A 100%);color:#1A1203;border-color:transparent;box-shadow:0 8px 24px rgba(245,188,69,.3)}
-.t.chg{background:#2B3563;border-color:#F5BC45;color:#FFD879}
-.t.goal{background:#0E1430;border:2px dashed #F5BC45;color:#FFD879}
-.t.win{background:linear-gradient(135deg,#7C5CFF,#4D2FD6);color:#fff;border-color:transparent;box-shadow:0 8px 24px rgba(124,92,255,.45)}
-.t.type{background:#2B3563;border-color:#F5F7FF;color:#fff}
-.t.type.empty{background:#0E1430;border:2px dashed #5A6AA8}
+.t.chg{background:#1A1633;border-color:#F5BC45;color:#FFD879}
+.t.goal{background:#07050F;border:2px dashed #F5BC45;color:#FFD879}
+.t.win{background:linear-gradient(135deg,#5B3FD0,#2E1A8A);color:#fff;border-color:transparent;box-shadow:0 8px 24px rgba(91,63,208,.45)}
+.t.type{background:#1A1633;border-color:#F5F7FF;color:#fff}
+.t.type.empty{background:#07050F;border:2px dashed #4A3F8F}
 .msg.good{color:#C9B8FF}
-.btn{border:1px solid #3A4678;background:rgba(255,255,255,.06);color:#F4F6FF;border-radius:14px;min-height:46px;padding:10px 20px}
+.btn{border:1px solid #2E2A55;background:rgba(255,255,255,.05);color:#F4F6FF;border-radius:14px;min-height:46px;padding:10px 20px}
 .btn.main{background:linear-gradient(135deg,#FFEFB8 0%,#F5BC45 45%,#B9791A 100%);border:0;color:#1A1203;font-weight:800;box-shadow:0 6px 18px rgba(245,188,69,.35)}
 .btn:disabled{opacity:.45}
-.k{height:46px;border-radius:10px;background:linear-gradient(180deg,#27315C,#1B2347);border:1px solid #3A4678;color:#F4F6FF;box-shadow:0 2px 0 #0B1020;max-width:46px}
+.k{height:46px;border-radius:10px;background:linear-gradient(180deg,#221C48,#120E2B);border:1px solid #2E2A55;color:#F4F6FF;box-shadow:0 2px 0 #000;max-width:46px}
 .k.w{max-width:70px}
-.k:active{background:#3A4678}
-.win-card{background:linear-gradient(135deg,rgba(124,92,255,.3),rgba(77,47,214,.18));border-color:rgba(160,140,255,.5)}
+.k:active{background:#3B3470}
+.win-card{background:linear-gradient(135deg,rgba(91,63,208,.32),rgba(46,26,138,.16));border-color:rgba(130,105,230,.45)}
 .win-card h2{font-size:28px;font-weight:800;letter-spacing:-.5px}
 .stats div{color:#FFD879}
 .guide li::before{background:linear-gradient(135deg,#FFEFB8,#F5BC45 50%,#B9791A)}
@@ -166,8 +166,8 @@ h1::before{content:"";flex:none;width:44px;height:44px;border-radius:13px;box-sh
 .lb li.r3{background:linear-gradient(135deg,rgba(226,162,114,.26),rgba(226,162,114,.05));border-color:rgba(226,162,114,.5)}
 .lb li.me{outline:2px solid #F5BC45;background:rgba(245,188,69,.16)}
 .lb .rk{font-size:20px}
-.join input{background:#0E1430;border:2px solid #3F4C85;color:#fff;border-radius:14px}
-.tip{background:linear-gradient(135deg,rgba(124,92,255,.35),rgba(77,47,214,.2));border-color:rgba(160,140,255,.5)}
+.join input{background:#07050F;border:2px solid #3B3470;color:#fff;border-radius:14px}
+.tip{background:linear-gradient(135deg,rgba(91,63,208,.32),rgba(46,26,138,.16));border-color:rgba(130,105,230,.45)}
 a.btn.main{color:#1A1203}
 .k.w{font-size:12px;padding:0}
 .join input::placeholder{font-size:13px;letter-spacing:0;text-transform:none}
