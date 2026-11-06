@@ -172,8 +172,37 @@ a.btn.main{color:#1A1203}
 .k.w{font-size:12px;padding:0}
 .join input::placeholder{font-size:13px;letter-spacing:0;text-transform:none}
 </style>
+<style id="frontpage">
+html.fp-on,html.fp-on body{overflow:hidden;height:100%}
+#fp{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;padding:24px;
+ background:radial-gradient(120% 90% at 20% 10%,#2a1a6e 0%,#120b3a 45%,#05050f 100%);color:#fff;
+ font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;transition:opacity .5s ease,transform .5s ease}
+#fp.fp-out{opacity:0;transform:scale(1.06);pointer-events:none}
+#fp .fp-box{max-width:560px;text-align:center}
+#fp .fp-launch{display:inline-block;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#c4b5fd;border:1px solid rgba(196,181,253,.4);border-radius:999px;padding:6px 14px;margin-bottom:22px}
+#fp h1::before{content:none!important;display:none!important}
+#fp h1{display:block;font-size:clamp(44px,12vw,84px);line-height:1;margin:0 0 18px;font-weight:800;letter-spacing:-.02em}
+#fp p{font-size:clamp(17px,4.4vw,22px);line-height:1.5;margin:0 0 30px;color:#d9d4f5}
+#fp button{font:inherit;font-weight:700;font-size:20px;padding:16px 34px;border:0;border-radius:999px;background:#F2A93B;color:#1A1100;cursor:pointer}
+#fp button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+</style>
 </head>
 <body>
+<div id="fp" role="dialog" aria-label="Daily Word Ladder">
+  <div class="fp-box">
+    <div class="fp-launch">First Launch Release &middot; Oct 28, 2026</div>
+    <h1>Daily Word Ladder</h1>
+    <p>Change one letter at a time.<br>Climb from word to word.<br>A new puzzle every day.</p>
+    <button id="fpGo" type="button">Play today's ladder</button>
+  </div>
+</div>
+<script>
+(function(){var d=document.documentElement,f=document.getElementById("fp"),b=document.getElementById("fpGo");
+d.classList.add("fp-on");
+function go(){f.classList.add("fp-out");d.classList.remove("fp-on");window.scrollTo(0,0);setTimeout(function(){if(f.parentNode)f.parentNode.removeChild(f);},600);}
+b.addEventListener("click",go);})();
+</script>
+
 <div class="wrap">
   <header>
     <h1>Daily Word Ladder</h1>
