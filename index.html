@@ -442,7 +442,7 @@ $("practice").addEventListener("click",()=>{const n=Math.floor(Math.random()*PUZ
 
 
 /* tip jar: the button appears only when a link is set here */
-const TIP_URL="https://paypal.me/dailywordladder";
+const TIP_URL="https://donate.stripe.com/00wfZj2ps0oTe3lbaqafS0a";
 if(TIP_URL){$("tipLink").href=TIP_URL;$("tip").hidden=false}
 try{if(localStorage.getItem("dwl_seen")==="1")$("guide").open=false}catch(e){}
 $("guide").addEventListener("toggle",()=>{try{if(!$("guide").open)localStorage.setItem("dwl_seen","1")}catch(e){}});
